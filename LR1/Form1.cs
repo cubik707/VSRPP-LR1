@@ -9,12 +9,11 @@ namespace LR1
     {
         Graphics g;
         Pen p = new Pen(Color.Bisque, 5);
-        SolidBrush brush = new SolidBrush(Color.Red);
-        List<Rectangle> shapes = new List<Rectangle>(); // Список для хранения квадратов
-        List<Rectangle> undoneShapes = new List<Rectangle>(); // Список для хранения удаленных квадратов
+        List<Rectangle> shapes = new List<Rectangle>(); // список для хранения квадратов
+        List<Rectangle> undoneShapes = new List<Rectangle>(); // список для хранения удаленных квадратов
         int startX, startY, endX, endY;
         bool isAltPressed = false;
-        Bitmap texture;
+        Bitmap texture; // для картинки
 
         public Form1()
         {
@@ -32,9 +31,9 @@ namespace LR1
             g = e.Graphics;
             foreach (var rect in shapes)
             {
-                g.DrawRectangle(p, rect);
                 TextureBrush textureBrush = new TextureBrush(texture);
                 g.FillRectangle(textureBrush, rect);
+                g.DrawRectangle(p, rect);
             }
         }
 
@@ -60,33 +59,43 @@ namespace LR1
         {
             if (e.Button == MouseButtons.Left)
             {
+                // Определение размеров и позиции квадрата
                 int width = Math.Abs(endX - startX);
                 int height = Math.Abs(endY - startY);
                 int x = Math.Min(startX, endX);
                 int y = Math.Min(startY, endY);
 
+                if (Control.ModifierKeys == Keys.Alt)
+                {
+                    p.Color = Color.Green; 
+                }
+                else
+                {
+                    p.Color = Color.Bisque;
+                }
+
                 Rectangle rect = new Rectangle(x, y, width, height);
-                shapes.Add(rect);
+                shapes.Add(rect); // Добавляем квадрат в список
                 Invalidate(); // Перерисовать форму
             }
         }
 
         private void Form1_KeyDown_1(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Alt)
-            {
-                isAltPressed = true;
-                p.Color = Color.Green; // Изменить цвет пера на зеленый
-            }
+            //if (e.KeyCode == Keys.Alt)
+            //{
+            //    isAltPressed = true;
+            //    p.Color = Color.Green; 
+            //}
         }
 
         private void Form1_KeyUp_1(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Alt)
-            {
-                isAltPressed = false;
-                p.Color = Color.Bisque; // Изменить цвет пера на исходный
-            }
+            //if (e.KeyCode == Keys.Alt)
+            //{
+            //    isAltPressed = false;
+            //    p.Color = Color.Bisque; // Изменить цвет пера на исходный
+            //}
         }
 
         private void undoToolStripMenuItem_Click_1(object sender, EventArgs e)
